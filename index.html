@@ -129,7 +129,37 @@
       letter-spacing: 0.05em;
     }
 
-    /* ── FILTER NAV ── */
+    .masthead-epigraph {
+      margin: 0 auto 1.8rem;
+      max-width: 560px;
+      padding: 0 1.5rem;
+      animation: inkBleed 2s ease-out both;
+      animation-delay: 1.8s;
+      opacity: 0;
+    }
+
+    .masthead-epigraph.visible {
+      opacity: 1;
+    }
+
+    .epigraph-line {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--parchment);
+      line-height: 1.5;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .epigraph-source {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--copper);
+      opacity: 0.8;
+    }
     .filter-bar {
       display: flex;
       justify-content: center;
@@ -504,6 +534,10 @@
   <div class="masthead-rule">
     <span class="masthead-glyph">⚖</span>
   </div>
+  <div class="masthead-epigraph" id="masthead-epigraph">
+    <span class="epigraph-line" id="epigraph-line"></span>
+    <span class="epigraph-source" id="epigraph-source"></span>
+  </div>
   <p class="masthead-tagline">stories &nbsp;·&nbsp; lyrics &nbsp;·&nbsp; poetry &nbsp;·&nbsp; thoughts</p>
 </header>
 
@@ -640,7 +674,47 @@
     if (e.key === 'Escape' && reader.classList.contains('open')) closeReader();
   });
 
-  // ── BODY RENDERERS ──
+  // ── RANDOM EPIGRAPH ──
+  const EPIGRAPHS = [
+    { line: "Drawn into the moonlit sky — born to live and never die.", source: "Aimless Charlie" },
+    { line: "What is love without the sin.", source: "Without the Sin" },
+    { line: "I see my world as just a question mark, and for the answer I return to the sea.", source: "Return to the Sea" },
+    { line: "Buffalo hurricane, you gave me strength at last — live for today and forget about your past.", source: "Buffalo Hurricane" },
+    { line: "I'm just a man of the road and I don't have to be here.", source: "Man of the Road" },
+    { line: "It's a shame that we could treat each other so unkind.", source: "Casy" },
+    { line: "He dropped the gun, stretched out his hand... \"Father\"", source: "The Hunter" },
+    { line: "All the promise and prayer has been wasted.", source: "Promise and Prayer" },
+    { line: "Could it be he changed his mind in the end, after all...?", source: "The Prophet" },
+    { line: "Gun Hill never smelled so goddamn sweet.", source: "Gun Hill" },
+    { line: "I feel it in my heart that on this earth you were my only friend.", source: "Ol' Snakeskin" },
+    { line: "How can something that once meant so much mean less than anything?", source: "Opaque" },
+    { line: "He stands like Satan who would not sink to hell till he had dragged a living part of heaven down to eternity.", source: "Return to the Sea" },
+    { line: "Don't run now baby, let me set you free.", source: "Lock and Key" },
+    { line: "I don't have to be clear. I don't have to be here. I don't have to be real. It just has to make you feel — something.", source: "Man of the Road" },
+    { line: "Though our roads have split apart, in the end they'll meet again.", source: "The Leaving" },
+    { line: "Unfurl my soul.", source: "Unfurl My Soul" },
+    { line: "Let's stick together — we'll find a solution, just as natural as rain.", source: "Just as Natural as Rain" },
+    { line: "I seeded the beginning a long time ago, and now I see the end.", source: "Three Days" },
+    { line: "Sometimes the sense runs right out of the common man.", source: "McAlester Swing" },
+    { line: "Winton Flyer, won't you take me away — I've been too young for too long.", source: "Winton Flyer" },
+    { line: "Not everyone has a face that's so easily read, and more often than not it's the good things we hide.", source: "Flamingo Johnny" },
+    { line: "Close your eyes and fly with me — slip through your chains and you are free.", source: "Red Willow" },
+    { line: "I want to gather all the leaves from a tree, throw them into the great blue sky, and while they float slowly to the ground — I'll be hoping one will fly.", source: "Brave the Change" },
+    { line: "Life is a striving after wind.", source: "The Prophet" },
+    { line: "Anger rages in you even still — stings in your eyes and stains your soul.", source: "Red Willow" },
+    { line: "She's got a heart made of gold-plated steel.", source: "Tough Enough" },
+    { line: "Throw 'em away — 'cause baby I want to live.", source: "Trailside Blues" },
+  ];
+
+  const pick = EPIGRAPHS[Math.floor(Math.random() * EPIGRAPHS.length)];
+  document.getElementById('epigraph-line').textContent   = '\u201C' + pick.line + '\u201D';
+  document.getElementById('epigraph-source').textContent = '— ' + pick.source;
+  // Fade in after title animation completes
+  setTimeout(() => {
+    document.getElementById('masthead-epigraph').classList.add('visible');
+  }, 1800);
+
+
   function renderBody(piece) {
     if (piece.type === 'story')    return renderStory(piece.body);
     if (piece.type === 'lyrics')   return renderLyrics(piece.body);
