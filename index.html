@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drawn into the Moonlit Sky</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #0d0b0e;
+      --surface:    #141018;
+      --card-bg:    #1c1625;
+      --card-hover: #241d30;
+      --copper:     #8b6f5e;
+      --parchment:  #c9a882;
+      --text:       #e0d4c0;
+      --text-dim:   #9a8e7e;
+      --text-faint: #5a5048;
+      --story:      #7a6fa0;
+      --lyrics:     #6f8f7a;
+      --poetry:     #8f6f7a;
+      --thoughts:   #7a8f6f;
+      --rule:       rgba(139, 111, 94, 0.25);
+      --glow:       rgba(201, 168, 130, 0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--ink);
+      color: var(--text);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── MASTHEAD ── */
+    .masthead {
+      position: relative;
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+      overflow: hidden;
+    }
+
+    .masthead::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,111,94,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .masthead-ornament {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: var(--copper);
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 1.2rem;
+    }
+
+    .masthead-title {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: normal;
+      color: var(--parchment);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Ink bleed signature effect */
+    .masthead-title .letter {
+      display: inline-block;
+      animation: inkBleed 1.8s ease-out both;
+      filter: blur(0px);
+    }
+
+    @keyframes inkBleed {
+      0%   { opacity: 0; filter: blur(8px); transform: scale(1.05); }
+      40%  { opacity: 0.6; filter: blur(3px); }
+      100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+    }
+
+    .masthead-rule {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem auto 1.2rem;
+      max-width: 320px;
+    }
+
+    .masthead-rule::before,
+    .masthead-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--copper), transparent);
+    }
+
+    .masthead-glyph {
+      color: var(--copper);
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .masthead-tagline {
+      font-family: 'Crimson Pro', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FILTER NAV ── */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.8rem 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-right: 0.5rem;
+    }
+
+    .filter-btn {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid var(--text-faint);
+      color: var(--text-dim);
+      padding: 0.4rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 0;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--parchment);
+      color: var(--parchment);
+    }
+
+    .filter-btn.active {
+      border-color: var(--copper);
+      color: var(--parchment);
+      background: rgba(139,111,94,0.12);
+    }
+
+    /* ── CARD GRID ── */
+    .grid-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2.2rem;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .card[data-type="story"]::before   { background: var(--story); }
+    .card[data-type="lyrics"]::before  { background: var(--lyrics); }
+    .card[data-type="poetry"]::before  { background: var(--poetry); }
+    .card[data-type="thoughts"]::before { background: var(--thoughts); }
+
+    .card:hover {
+      background: var(--card-hover);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-type {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .card[data-type="story"]    .card-type { color: var(--story); }
+    .card[data-type="lyrics"]   .card-type { color: var(--lyrics); }
+    .card[data-type="poetry"]   .card-type { color: var(--poetry); }
+    .card[data-type="thoughts"] .card-type { color: var(--thoughts); }
+
+    .card-title {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.45rem;
+      font-weight: normal;
+      color: var(--parchment);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-subtitle {
+      font-family: 'Crimson Pro', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .card-date {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+    }
+
+    .card-read {
+      font-family: 'Crimson Pro', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--copper);
+      transition: color 0.2s;
+    }
+
+    .card:hover .card-read {
+      color: var(--parchment);
+    }
+
+    .card.hidden { display: none; }
+
+    /* ── READER OVERLAY ── */
+    .reader-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 6, 10, 0.97);
+      z-index: 100;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .reader-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .reader-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 5rem 2rem 8rem;
+    }
+
+    .reader-close {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 3.5rem;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .reader-close::before {
+      content: '←';
+      font-size: 0.9rem;
+    }
+
+    .reader-close:hover { color: var(--parchment); }
+
+    .reader-type {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    #reader-type-label.story    { color: var(--story); }
+    #reader-type-label.lyrics   { color: var(--lyrics); }
+    #reader-type-label.poetry   { color: var(--poetry); }
+    #reader-type-label.thoughts { color: var(--thoughts); }
+
+    .reader-title {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: normal;
+      color: var(--parchment);
+      line-height: 1.1;
+      margin-bottom: 0.6rem;
+    }
+
+    .reader-subtitle {
+      font-family: 'Crimson Pro', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .reader-date {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+      margin-bottom: 2.5rem;
+    }
+
+    .reader-rule {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .reader-rule::before,
+    .reader-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--copper));
+    }
+
+    .reader-rule::after {
+      background: linear-gradient(90deg, var(--copper), transparent);
+    }
+
+    .reader-rule-glyph {
+      color: var(--copper);
+      opacity: 0.6;
+      font-size: 0.9rem;
+    }
+
+    /* ── BODY TEXT BY TYPE ── */
+    .reader-body {
+      line-height: 1.9;
+      color: var(--text);
+    }
+
+    /* Story: prose paragraphs */
+    .reader-body.story p {
+      font-size: 1.15rem;
+      margin-bottom: 1.6em;
+      font-family: 'Crimson Pro', serif;
+    }
+
+    .reader-body.story em {
+      font-style: italic;
+      color: var(--text-dim);
+    }
+
+    /* Lyrics: line breaks, chorus offset */
+    .reader-body.lyrics {
+      font-family: 'Crimson Pro', serif;
+      font-size: 1.1rem;
+      white-space: pre-wrap;
+    }
+
+    .reader-body.lyrics .lyric-block {
+      margin-bottom: 2em;
+    }
+
+    .reader-body.lyrics .lyric-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.8em;
+    }
+
+    .reader-body.lyrics .chorus {
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--lyrics);
+      color: var(--text);
+    }
+
+    .reader-body.lyrics .bridge {
+      font-style: italic;
+      color: var(--text-dim);
+    }
+
+    /* Poetry: centered, generous spacing */
+    .reader-body.poetry {
+      font-family: 'Crimson Pro', serif;
+      font-size: 1.15rem;
+      text-align: center;
+      white-space: pre-wrap;
+      line-height: 2.1;
+      color: var(--text);
+    }
+
+    /* Thoughts: flowing prose, slightly more intimate spacing */
+    .reader-body.thoughts p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5em;
+      font-family: 'Crimson Pro', serif;
+      color: var(--text);
+    }
+
+    .reader-body.thoughts em {
+      font-style: italic;
+      color: var(--text-dim);
+    }
+    .site-footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--rule);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .footer-glyph {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      color: var(--copper);
+      opacity: 0.5;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .masthead { padding: 3.5rem 1.5rem 2.5rem; }
+      .grid-container { padding: 0 0 4rem; }
+      .card { padding: 1.8rem; }
+      .reader-inner { padding: 3.5rem 1.5rem 6rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .masthead-title .letter { animation: none; }
+      .reader-overlay { transition: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ── MASTHEAD ── -->
+<header class="masthead">
+  <p class="masthead-ornament">est. mmxxiii</p>
+  <h1 class="masthead-title" id="masthead-title"></h1>
+  <div class="masthead-rule">
+    <span class="masthead-glyph">⚖</span>
+  </div>
+  <p class="masthead-tagline">stories &nbsp;·&nbsp; lyrics &nbsp;·&nbsp; poetry &nbsp;·&nbsp; thoughts</p>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<nav class="filter-bar" aria-label="Filter by type">
+  <span class="filter-label">Show</span>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="story">Stories</button>
+  <button class="filter-btn" data-filter="lyrics">Lyrics</button>
+  <button class="filter-btn" data-filter="poetry">Poetry</button>
+  <button class="filter-btn" data-filter="thoughts">Thoughts</button>
+</nav>
+
+<!-- ── CARD GRID ── -->
+<main class="grid-container">
+  <div class="card-grid" id="card-grid"></div>
+</main>
+
+<!-- ── READER OVERLAY ── -->
+<div class="reader-overlay" id="reader" role="dialog" aria-modal="true" aria-label="Reading view">
+  <div class="reader-inner">
+    <button class="reader-close" id="reader-close">Back to the press</button>
+    <div id="reader-type-label" class="reader-type"></div>
+    <h2 class="reader-title" id="reader-title"></h2>
+    <p class="reader-subtitle" id="reader-subtitle"></p>
+    <p class="reader-date" id="reader-date"></p>
+    <div class="reader-rule"><span class="reader-rule-glyph">✦</span></div>
+    <div class="reader-body" id="reader-body"></div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <span class="footer-glyph">⚖</span>
+  Dark Arts Press &nbsp;·&nbsp; Drawn into the Moonlit Sky
+</footer>
+
+<script src="content.js"></script>
+<script>
+
+  // ── INK BLEED MASTHEAD ──
+  const title = "Drawn into the Moonlit Sky";
+  const titleEl = document.getElementById('masthead-title');
+  title.split('').forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className = 'letter';
+    span.textContent = ch === ' ' ? '\u00A0' : ch;
+    span.style.animationDelay = `${i * 0.07}s`;
+    titleEl.appendChild(span);
+  });
+
+  // ── BUILD CARDS ──
+  const grid = document.getElementById('card-grid');
+
+  function buildCards(pieces) {
+    grid.innerHTML = '';
+    pieces.forEach(piece => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.type = piece.type;
+      card.dataset.id   = piece.id;
+      card.innerHTML = `
+        <div class="card-type">${piece.type}</div>
+        <h2 class="card-title">${piece.title}</h2>
+        <p class="card-subtitle">${piece.subtitle}</p>
+        <div class="card-footer">
+          <span class="card-date">${piece.date}</span>
+          <span class="card-read">Read →</span>
+        </div>
+      `;
+      card.addEventListener('click', () => openReader(piece));
+      grid.appendChild(card);
+    });
+  }
+
+  buildCards(DAP_CONTENT);
+
+  // ── FILTER ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      const filtered = filter === 'all'
+        ? DAP_CONTENT
+        : DAP_CONTENT.filter(p => p.type === filter);
+      buildCards(filtered);
+    });
+  });
+
+  // ── READER ──
+  const reader    = document.getElementById('reader');
+  const closeBtn  = document.getElementById('reader-close');
+
+  function openReader(piece) {
+    document.getElementById('reader-type-label').textContent = piece.type;
+    document.getElementById('reader-type-label').className   = `reader-type ${piece.type}`;
+    document.getElementById('reader-title').textContent      = piece.title;
+    document.getElementById('reader-subtitle').textContent   = piece.subtitle;
+    document.getElementById('reader-date').textContent       = piece.date;
+
+    const body = document.getElementById('reader-body');
+    body.className = `reader-body ${piece.type}`;
+    body.innerHTML = renderBody(piece);
+
+    reader.classList.add('open');
+    reader.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeReader() {
+    reader.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeReader);
+
+  reader.addEventListener('click', e => {
+    if (e.target === reader) closeReader();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && reader.classList.contains('open')) closeReader();
+  });
+
+  // ── BODY RENDERERS ──
+  function renderBody(piece) {
+    if (piece.type === 'story')    return renderStory(piece.body);
+    if (piece.type === 'lyrics')   return renderLyrics(piece.body);
+    if (piece.type === 'poetry')   return renderPoetry(piece.body);
+    if (piece.type === 'thoughts') return renderStory(piece.body); // prose paragraphs, same as story
+    return `<p>${piece.body}</p>`;
+  }
+
+  function renderStory(text) {
+    // Split on double newlines for paragraphs; honour *italic* markers
+    return text.trim().split(/\n\n+/).map(para => {
+      const escaped = para
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      return `<p>${escaped}</p>`;
+    }).join('');
+  }
+
+  function renderLyrics(text) {
+    // Parse blocks separated by — (em-dash line) or double newlines
+    // Label lines like "*Chorus:*" get special treatment
+    const blocks = text.trim().split(/\n—\n|\n\n(?=\n)/);
+    return text.trim().split(/\n\n+/).map(block => {
+      block = block.trim();
+      if (!block || block === '—') return '';
+
+      // Detect label line (starts and ends with *)
+      const labelMatch = block.match(/^\*([^*]+)\*\n([\s\S]*)$/);
+      if (labelMatch) {
+        const label   = labelMatch[1].trim();
+        const content = labelMatch[2].trim();
+        const isChorus = /chorus/i.test(label);
+        const isBridge = /bridge/i.test(label);
+        return `<div class="lyric-block">
+          <div class="lyric-label">${label}</div>
+          <div class="${isChorus ? 'chorus' : isBridge ? 'bridge' : ''}">${content.replace(/\n/g, '<br>')}</div>
+        </div>`;
+      }
+
+      return `<div class="lyric-block">${block.replace(/\n/g, '<br>')}</div>`;
+    }).filter(Boolean).join('');
+  }
+
+  function renderPoetry(text) {
+    // Poetry renders as pre-formatted centered text
+    return `<div>${text.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
+  }
+
+</script>
+</body>
+</html>
