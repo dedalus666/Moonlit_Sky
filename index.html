@@ -72,7 +72,7 @@
 
     .masthead-title {
       font-family: 'IM Fell English', serif;
-      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-size: clamp(1.9rem, 7vw, 5.5rem);
       font-weight: normal;
       color: var(--parchment);
       line-height: 1.05;
@@ -82,10 +82,14 @@
     }
 
     /* Ink bleed signature effect */
-    .masthead-title .letter {
+    .masthead-title .word {
       display: inline-block;
+      white-space: nowrap;
+    }
+
+    .masthead-title .letter {
+      display: inline;
       animation: inkBleed 1.8s ease-out both;
-      filter: blur(0px);
     }
 
     @keyframes inkBleed {
@@ -543,12 +547,22 @@
   // ── INK BLEED MASTHEAD ──
   const title = "Drawn into the Moonlit Sky";
   const titleEl = document.getElementById('masthead-title');
-  title.split('').forEach((ch, i) => {
-    const span = document.createElement('span');
-    span.className = 'letter';
-    span.textContent = ch === ' ' ? '\u00A0' : ch;
-    span.style.animationDelay = `${i * 0.07}s`;
-    titleEl.appendChild(span);
+  let letterIndex = 0;
+  title.split(' ').forEach((word, wi) => {
+    const wordSpan = document.createElement('span');
+    wordSpan.className = 'word';
+    word.split('').forEach(ch => {
+      const span = document.createElement('span');
+      span.className = 'letter';
+      span.textContent = ch;
+      span.style.animationDelay = `${letterIndex * 0.07}s`;
+      letterIndex++;
+      wordSpan.appendChild(span);
+    });
+    titleEl.appendChild(wordSpan);
+    if (wi < title.split(' ').length - 1) {
+      titleEl.appendChild(document.createTextNode(' '));
+    }
   });
 
   // ── BUILD CARDS ──
